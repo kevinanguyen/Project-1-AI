@@ -1,0 +1,102 @@
+Answer questions marked as "QS"
+
+QS1.1:
+
+We use a stack (Last-In-First-Out) to implement DFS. This ensures that the deepest node is explored first before backtracking.
+
+QS1.2:
+
+Yes; it goes deep first before backtracking. However, DFS does not necessarily explore the shortest path; it sometimes can lead to inefficient 
+solutions in larger mazes. Also, Pacman does not visit all explored squares since DFS may find the goal before exhausting all possible paths.
+
+QS2.1:
+
+We use a Queue (First-In-First-Out) to implement BFS. This ensures that nodes are explored in order of depth, guaranteeing that the 
+shortest path (in terms of actions) is found before exploring deeper paths.
+
+QS3.1:
+
+The cost function implemented in Uniform-Cost Search (UCS) considers the cumulative step cost of reaching a state. 
+This means it always expands the lowest-cost path first, ensuring an optimal solution.
+
+QS4.1:
+
+What is the difference between nullHeuristic and manhattanHeuristic?
+    nullHeuristic(state, problem): Always returns 0, treating A* like UCS.
+    manhattanHeuristic(state, problem): Estimates how far a state is from the goal using Manhattan distance.
+
+Does nullHeuristic give the optimal solution?
+    Yes, but it behaves exactly like UCS, so it expands more nodes and is slower.
+
+Why is manhattanHeuristic better?
+    It guides the search toward the goal, reducing the number of nodes expanded.
+    Leads to a faster optimal solution in grid-based environments.
+
+
+QS5.1:
+
+For the CornersProblem, the state representation consists of:
+
+Pacman’s current position (x, y) in the maze.
+A tuple of visited corners, indicating which of the four corners have been reached.
+
+QS5.2:
+
+Initialization:
+    The problem initializes by storing the walls, Pacman’s starting position, and the four corner coordinates.
+
+State Representation:
+    The state is represented as (current_position, visited_corners), where visited_corners is a tuple keeping track of which corners have been reached.
+
+Goal State:
+    The goal state is reached when all four corners have been visited.
+
+Successors Function (getSuccessors):
+    For each possible movement (NORTH, SOUTH, EAST, WEST):
+        Compute the next position based on the action.
+            If the new position is a valid move (not a wall):
+            Check if the new position is a corner that hasn’t been visited yet.
+            If yes, add it to the visited corners.
+            Add the new state ((next_position, updated_corners), action, 1) to successors.
+
+Cost Function:
+    Every move has a uniform cost of 1. The problem relies on A* or BFS/UCS to find the optimal path.
+
+QS6.1:
+
+We used a greedy nearest-neighbor heuristic based on Manhattan distance. This heuristic estimates the remaining cost by:
+    Finding the closest unvisited corner from the current position.
+    Calculating the total distance required to visit all remaining corners in the shortest possible order (i.e., a greedy path through unvisited corners).
+    Summing up the distances to form a lower bound estimate of the true cost.
+
+QS7.1:
+
+Heuristic Chosen
+    The heuristic used is the maze distance to the farthest food dot from Pacman’s current position.
+    mazeDistance(position, food, problem.startingGameState) computes the exact number of steps Pacman would take to reach a given food dot.
+
+Strengths of This Heuristic
+    Admissible: The heuristic never overestimates the remaining cost because the maze distance is the actual path cost.
+    Consistent: Moving towards food decreases the estimated distance, ensuring f(n) (total cost estimate) is non-decreasing.
+    Effective Pruning: It reduces node expansion significantly compared to simpler heuristics like Manhattan distance.
+
+Weaknesses
+    Computational Cost: Calculating maze distances requires running BFS/Dijkstra internally, which is expensive.
+    Limited Optimization: While reducing search nodes, it doesn't account for optimal multi-step food collection.
+
+Consistency
+    The heuristic is consistent because every move reduces the estimated remaining distance by at most 1, and it returns 0 at goal states (when all food is collected).
+    If A* and UCS return paths of the same length, the heuristic is proven consistent.
+
+QS8.1
+
+Strengths
+    BFS ensures the quickest path to the nearest dot, making the agent highly efficient in large mazes.
+    Since BFS finds the shortest path in an unweighted grid, this approach minimizes movement.
+    The algorithm is straightforward—Pacman keeps targeting the closest food.
+    It avoids unnecessary computations compared to A* or complex heuristics.
+
+Weaknesses
+    Locally Greedy, Not Globally Optimal:
+        Always targeting the closest dot does not guarantee the shortest total path.
+        Pacman might backtrack inefficiently or take long detours.
